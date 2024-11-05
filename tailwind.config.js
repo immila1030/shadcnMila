@@ -59,6 +59,9 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        accordion: {
+          DEFAULT: 'hsl(var(--accordion))',
+        },
       },
       borderRadius: {
         xl: 'calc(var(--radius) + 4px)',
@@ -140,8 +143,15 @@ module.exports = {
         fz23: '80px',
       },
       // 圓角
+      // 我省略了 3px 4px 28px
       borderRadius: {
+        5: '5px',
+        10: '10px',
+        20: '20px',
         50: '50px',
+        150: '150px',
+        '50%': '50%',
+        '100%': '100%',
       },
     },
   },

@@ -1,20 +1,226 @@
 <template>
+  <!-- 手風琴 -->
   <div class="m-20">
     <p class="text-fz16 mt-10">Accordion 手風琴</p>
-    <div class="flex">
-      <Button>主色一般</Button>
-      <Button variant="secondary">次要顏色</Button>
-      <Button variant="destructive">刪除</Button>
-      <Button variant="outline">Outline</Button>
-      <Button variant="link">Link</Button>
-      <Button variant="outline" size="icon">
+    <hr class="my-10" />
+    <p class="text-fz8 mt-10">訂閱取消與收費規則</p>
+    <Accordion type="multiple" class="w-full" collapsible>
+      <AccordionItem
+        v-for="item in accordionItems"
+        :key="item.value"
+        :value="item.value"
+      >
+        <AccordionTrigger>
+          {{ item.title }}
+        </AccordionTrigger>
+        <AccordionContent>
+          {{ item.content }}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  </div>
+  <!-- 按鈕 -->
+  <div class="m-20">
+    <p class="text-fz16 mt-10">Button 按鈕</p>
+    <hr class="my-10" />
+    <p class="text-fz12 my-10">預設樣式</p>
+    <div class="flex gap-10 justify-center">
+      <Button>主色一般[default]</Button>
+      <Button variant="secondary">次要顏色[secondary]</Button>
+      <Button variant="destructive">刪除[destructive]</Button>
+    </div>
+    <hr class="my-10" />
+    <p class="text-fz12 my-10">預設outline樣式</p>
+    <div class="flex gap-10 justify-center">
+      <Button variant="outline-primary">主色Outline[outline-primary]</Button>
+      <Button variant="outline-secondary">
+        次要Outline[outline-secondary]
+      </Button>
+      <Button variant="outline-destructive">
+        刪除Outline[outline-destructive]
+      </Button>
+    </div>
+    <hr class="my-10" />
+    <p class="text-fz12 my-10">預設Link和ghost樣式(目前保留)</p>
+    <div class="flex gap-10 justify-center">
+      <Button variant="link">Link[link]</Button>
+      <Button variant="ghost">ghost[ghost]</Button>
+    </div>
+    <hr class="my-10" />
+    <p class="text-fz12 my-10">方形以及單純icon和icon+文字</p>
+    <div class="flex gap-10 justify-center">
+      <Button variant="icon">
         <ChevronRight class="w-4 h-4" />
       </Button>
+      <Button variant="icon" size="icon">
+        <ChevronRight class="w-4 h-4" />
+        +文字
+      </Button>
+      <Button variant="icon" size="icon">文字</Button>
       <Button>
         <Mail class="w-4 h-4 mr-2" />
         Login with Email
       </Button>
     </div>
+    <hr class="my-10" />
+    <p class="text-fz12 mt-10">按鈕大小</p>
+    <div class="flex gap-10 justify-center my-10">
+      <Button size="default">default [12 15]</Button>
+      <Button size="mini">size mini[5 10]</Button>
+      <Button size="sm">size sm [12 24]</Button>
+      <Button size="lg">size lg [12 32]</Button>
+      <Button size="icon">size icon[8]</Button>
+      <Button size="square">size square [10]</Button>
+    </div>
+    <div class="flex gap-10 justify-center">
+      <Button size="full">size full [full]</Button>
+    </div>
+  </div>
+  <!-- 複選框 -->
+  <div class="m-20">
+    <p class="text-fz16 mt-10">Checkbox 複選框</p>
+    <hr class="my-10" />
+    <div class="flex items-center space-x-2 gap-10 justify-center my-10">
+      <Checkbox id="terms" />
+      <label
+        for="terms"
+        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none"
+      >
+        我同意
+      </label>
+    </div>
+  </div>
+  <!-- 模組(可關閉靜態背景) -->
+  <div class="m-20">
+    <p class="text-fz16 mt-10">Dialog 模組(可關閉靜態背景)</p>
+    <p>這邊模組只有更動DialogTitle DialogContent</p>
+    <hr class="my-10" />
+    <!-- 桌機版 24 20 -->
+    <Dialog>
+      <DialogTrigger as-child>
+        <Button>透過DialogTrigger Open [桌機版 24 20]</Button>
+      </DialogTrigger>
+      <!-- 這邊可以去找tailwind的max width部分，去設置最大寬 -->
+      <DialogContent class="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>
+            請不用在DialogContent加入variant 它會自動吃default
+          </DialogTitle>
+          <DialogDescription>
+            DialogDescription是對話框描述，可用可不用
+          </DialogDescription>
+        </DialogHeader>
+        <div class="flex items-center space-x-2">
+          我是內容
+          這邊我沒有強制做什麼css更動，可在這邊直接使用div放自己所負責的專案modal內容
+        </div>
+        <DialogFooter class="sm:justify-start">
+          <div class="flex flex-col">
+            <hr />
+            footer也可以任意放自己所需的內容，如不需要footer可不用DialogFooter
+            <DialogClose as-child>
+              <Button type="button" variant="secondary">取消</Button>
+            </DialogClose>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+    <!-- 手機版 20 20 -->
+    <Dialog>
+      <DialogTrigger as-child>
+        <Button>透過DialogTrigger Open [手機版 20 20]</Button>
+      </DialogTrigger>
+      <DialogContent variant="secondary" class="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>請在DialogContent加入variant="secondary"</DialogTitle>
+          <DialogDescription>
+            DialogDescription是對話框描述，可用可不用
+          </DialogDescription>
+        </DialogHeader>
+        <div class="flex items-center space-x-2">我是內容</div>
+        <DialogFooter>
+          <DialogClose as-child>
+            <Button type="button" variant="secondary">Close</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  </div>
+  <!-- 模組(不可關閉靜態背景) -->
+  <div class="m-20">
+    <p class="text-fz16 mt-10">Alert Dialog 模組(不可關閉靜態背景)</p>
+    <p>這邊模組只有更動AlertDialogTitle AlertDialogContent</p>
+    <hr class="my-10" />
+    <!-- 桌機版 24 20 -->
+    <AlertDialog>
+      <AlertDialogTrigger as-child>
+        <Button>AlertDialogTrigger Open [桌機版 24 20]</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            AlertDialogContent 它會自動吃default
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            DialogDescription是對話框描述，可用可不用
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <div class="flex items-center space-x-2">
+          我是內容
+          這邊我沒有強制做什麼css更動，可在這邊直接使用div放自己所負責的專案modal內容
+        </div>
+        <AlertDialogFooter>
+          <div class="flex flex-col">
+            <hr />
+            footer也可以任意放自己所需的內容，如不需要footer可不用DialogFooter
+            <div class="flex justify-end">
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>Continue</AlertDialogAction>
+            </div>
+          </div>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    <!-- 手機版 20 20 -->
+    <AlertDialog>
+      <AlertDialogTrigger as-child>
+        <Button variant="secondary">
+          AlertDialogTrigger Open [手機版 20 20]
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent variant="secondary">
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            請在AlertDialogContent加入variant="secondary"
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            DialogDescription是對話框描述，可用可不用
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </div>
+  <!-- 表單 -->
+  <div class="m-20">
+    <p class="text-fz16 mt-10">Form 表單</p>
+    <hr class="my-10" />
+    <form class="w-2/3 space-y-6" @submit="onSubmit">
+      <FormField v-slot="{ componentField }" name="username">
+        <FormItem>
+          <FormLabel>Username</FormLabel>
+          <FormControl>
+            <Input type="text" placeholder="shadcn" v-bind="componentField" />
+          </FormControl>
+          <FormDescription>This is your public display name.</FormDescription>
+          <FormMessage />
+        </FormItem>
+      </FormField>
+      <Button type="submit">Submit</Button>
+    </form>
   </div>
 </template>
 
@@ -22,6 +228,96 @@
 import { Button } from '@/components/ui/button';
 import { Mail } from 'lucide-vue-next';
 import { ChevronRight } from 'lucide-vue-next';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+// The <Form /> component is a wrapper around the vee-validate library.
+// 該<Form />元件是庫的包裝器vee-validate
+import { toTypedSchema } from '@vee-validate/zod';
+// Use the useForm composable from vee-validate or use <Form /> component to create a form.
+// 使用 vee-validate 中的 useForm 可組合項目或使用 <Form /> 元件來建立表單。
+import { useForm } from 'vee-validate';
+import { h } from 'vue';
+import * as z from 'zod'; //表單驗證
+const accordionItems = [
+  {
+    value: 'item-1',
+    title: '如果系統停止收取會費',
+    content:
+      '除非您重新啟用帳戶，否則系統不會再向您收費。 取消時，若收費週期內還有剩餘天數，您仍可繼續使用 未來裝修圖說，您的帳戶將在收費週期結束時自動取消。',
+  },
+  {
+    value: 'item-2',
+    title: '如何取消訂閱？',
+    content:
+      '如需取消訂閱，請直接點擊本頁上方的「取消訂閱」文字即可完成，或 點擊這裡 跳轉至取消訂閱區塊。取消後，您仍可使用服務至計費週期結束。',
+  },
+  {
+    value: 'item-3',
+    title: '在持有優惠點數的情況下取消',
+    content:
+      '取消後，您仍可繼續使用 未來裝修圖說優惠點數 使用 未來裝修圖說，直到餘額用畢為止。 餘額用完後，您就不能再使用 未來裝修圖說。',
+  },
+  {
+    value: 'item-4',
+    title: '重新加入 未來裝修圖說',
+    content: '您隨時可以 重新啟用未來裝修圖說帳戶',
+  },
+];
+const formSchema = toTypedSchema(
+  z.object({
+    username: z.string().min(2).max(50),
+  })
+);
+
+const { handleSubmit } = useForm({
+  validationSchema: formSchema,
+});
+
+const onSubmit = handleSubmit((values) => {
+  toast({
+    title: 'You submitted the following values:',
+    description: h(
+      'pre',
+      { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+      h('code', { class: 'text-white' }, JSON.stringify(values, null, 2))
+    ),
+  });
+});
 </script>
 
 <style></style>

@@ -7,7 +7,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "paths": {
-      "@/*": ["./src"]
+      "@/*": ["src/*"]
     },
     /* Bundler mode */
     "moduleResolution": "Bundler",
