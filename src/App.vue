@@ -1,30 +1,27 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="m-20">
+    <p class="text-fz16 mt-10">Accordion 手風琴</p>
+    <div class="flex">
+      <Button>主色一般</Button>
+      <Button variant="secondary">次要顏色</Button>
+      <Button variant="destructive">刪除</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="link">Link</Button>
+      <Button variant="outline" size="icon">
+        <ChevronRight class="w-4 h-4" />
+      </Button>
+      <Button>
+        <Mail class="w-4 h-4 mr-2" />
+        Login with Email
+      </Button>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<script setup lang="ts">
+import { Button } from '@/components/ui/button';
+import { Mail } from 'lucide-vue-next';
+import { ChevronRight } from 'lucide-vue-next';
+</script>
+
+<style></style>
