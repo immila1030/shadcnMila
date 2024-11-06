@@ -262,44 +262,78 @@
   </div>
   <!-- 路由 -->
   <div class="m-20">
-    <p class="text-fz16 mt-10">Form 表單</p>
+    <p class="text-fz16 mt-10">Router 路由</p>
     <hr class="my-10" />
-    <Collapsible v-model:open="isOpen">
-      <CollapsibleTrigger>Can I use this in my project?</CollapsibleTrigger>
-      <CollapsibleContent>
-        Yes. Free to use for personal and commercial projects. No attribution
-        required.
-      </CollapsibleContent>
-    </Collapsible>
     <!-- 直接使用 Collapsible 和 CollapsibleContent -->
     <!-- 參考 https://www.shadcn-vue.com/blocks.html#Sidebar07 -->
+    <!-- 目前暫時用 <a>標籤，之後我會改可以使用 router-view -->
+    <p>桌機版路由</p>
     <Collapsible
       v-for="item in data.navMain"
       :key="item.title"
       as-child
-      :default-open="item.isActive"
       class="group/collapsible"
     >
       <CollapsibleTrigger as-child>
-        <button class="menu-button" :tooltip="item.title">
+        <button class="menu-button flex gap-8" :tooltip="item.title">
           <component :is="item.icon" />
           <span>{{ item.title }}</span>
         </button>
       </CollapsibleTrigger>
-      <CollapsibleContent>
-        <div class="submenu">
-          <div
-            v-for="subItem in item.items"
-            :key="subItem.title"
-            class="submenu-item"
-          >
+      <CollapsibleContent v-for="subItem in item.items" :key="subItem.id">
+        <a :href="subItem.url">
+          <span>{{ subItem.title }}</span>
+        </a>
+      </CollapsibleContent>
+    </Collapsible>
+    <p class="mt-20">手機版路由</p>
+    <Collapsible
+      v-for="item in data.navMain"
+      :key="item.title"
+      as-child
+      class="group/collapsible"
+      variant="secondary"
+    >
+      <CollapsibleTrigger as-child>
+        <button class="menu-button flex gap-8" :tooltip="item.title">
+          <component :is="item.icon" />
+          <span>{{ item.title }}</span>
+        </button>
+      </CollapsibleTrigger>
+      <CollapsibleContent v-for="subItem in item.items" :key="subItem.id">
+        <a :href="subItem.url">
+          <span>{{ subItem.title }}</span>
+        </a>
+      </CollapsibleContent>
+    </Collapsible>
+  </div>
+  <div class="m-20">
+    <p class="text-fz16 mt-10">側邊欄打開</p>
+    <hr class="my-10" />
+    <Sheet>
+      <SheetTrigger>Open</SheetTrigger>
+      <SheetContent :backgroundImageClass="'bg-[url(@/assets/mask.png)]'">
+        <Collapsible
+          v-for="item in data.navMain"
+          :key="item.title"
+          as-child
+          class="group/collapsible"
+          variant="secondary"
+        >
+          <CollapsibleTrigger as-child>
+            <button class="menu-button flex gap-8" :tooltip="item.title">
+              <component :is="item.icon" />
+              <span>{{ item.title }}</span>
+            </button>
+          </CollapsibleTrigger>
+          <CollapsibleContent v-for="subItem in item.items" :key="subItem.id">
             <a :href="subItem.url">
               <span>{{ subItem.title }}</span>
             </a>
-          </div>
-        </div>
-      </CollapsibleContent>
-    </Collapsible>
+          </CollapsibleContent>
+        </Collapsible>
+      </SheetContent>
+    </Sheet>
   </div>
 </template>
 
@@ -368,8 +402,17 @@ import {
   PaginationNext,
   PaginationPrev,
 } from '@/components/ui/pagination';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 const { toast } = useToast();
 const isOpen = ref(false);
+const backgroundImageClass = ref('bg-[url(@/assets/mask.png)]');
 // 手風琴
 const accordionItems = [
   {

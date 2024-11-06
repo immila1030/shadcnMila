@@ -115,6 +115,7 @@ module.exports = {
         17: '25px',
         18: '30px',
         19: '32px',
+        20: '60px',
       },
       // 文字大小
       fontSize: {
