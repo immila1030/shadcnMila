@@ -1,4 +1,5 @@
 <template>
+  <Toaster />
   <!-- 手風琴 -->
   <div class="m-20">
     <p class="text-fz16 mt-10">Accordion 手風琴</p>
@@ -211,11 +212,14 @@
     <form class="w-2/3 space-y-6" @submit="onSubmit">
       <FormField v-slot="{ componentField }" name="username">
         <FormItem>
-          <FormLabel>Username</FormLabel>
+          <!-- 這邊我自己設定如果這是必填的部分，只要在label加入required，就會自動幫你產生* -->
+          <!-- 如果你傳遞 description，像是經銷商的個人帳號設置 就有描述，可以傳遞description="文字"，那會在label後面拿到剛剛打的文字 -->
+          <FormLabel required description="(建議尺寸:600*230px)">
+            名字
+          </FormLabel>
           <FormControl>
             <Input type="text" placeholder="shadcn" v-bind="componentField" />
           </FormControl>
-          <FormDescription>This is your public display name.</FormDescription>
           <FormMessage />
         </FormItem>
       </FormField>
@@ -273,6 +277,9 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import { h } from 'vue';
 import * as z from 'zod'; //表單驗證
+import { Toaster } from '@/components/ui/toast';
+import { useToast } from '@/components/ui/toast/use-toast';
+const { toast } = useToast();
 const accordionItems = [
   {
     value: 'item-1',
@@ -300,7 +307,18 @@ const accordionItems = [
 ];
 const formSchema = toTypedSchema(
   z.object({
-    username: z.string().min(2).max(50),
+    username: z
+      // 這邊可以蓋掉vee-validate/zod 預設的 Required
+      .string({
+        required_error: '我會蓋掉Required',
+      })
+      // 這邊開始都可以再繼續自定義錯誤訊息
+      .min(2, {
+        message: '輸入小於2字元會錯誤訊息',
+      })
+      .max(8, {
+        message: '輸入超過8個字會錯誤訊息',
+      }),
   })
 );
 
@@ -309,6 +327,7 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit((values) => {
+  console.log('12');
   toast({
     title: 'You submitted the following values:',
     description: h(
