@@ -43,7 +43,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     />
 
     <DialogContent
-      class="test"
+      class="sidebarBackground"
       :style="{
         'background-image': props.backgroundImageUrl
           ? `url(${props.backgroundImageUrl})`
@@ -57,7 +57,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
   </DialogPortal>
 </template>
 <style scoped lang="scss">
-.test {
+.sidebarBackground {
   background-repeat: no-repeat;
   background-size: 100% auto;
   &::before {
