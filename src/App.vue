@@ -353,7 +353,14 @@
     <hr class="my-10" />
     <Sheet>
       <SheetTrigger>Open</SheetTrigger>
-      <SheetContent :backgroundImageClass="'bg-[url(@/assets/mask.png)]'">
+      <!-- @/assets/mask.png -->
+      <SheetContent :backgroundImageUrl="backgroundImage">
+        <!-- 這邊即便時沒有要使用也要加入才不會有wran的問題在開發人員工具印出 -->
+        <SheetHeader>
+          <SheetTitle></SheetTitle>
+          <SheetDescription></SheetDescription>
+        </SheetHeader>
+        <!-- 到這邊 -->
         <Collapsible
           v-for="item in data.navMain"
           :key="item.title"
@@ -453,6 +460,7 @@ import {
 } from '@/components/ui/sheet';
 // 參考 https://vueuse.org/shared/useToggle/#usetoggle
 import { useToggle } from '@vueuse/core';
+import backgroundImage from '@/assets/mask.png';
 const [isDialogOpen, toggleDialogOpen] = useToggle();
 
 // checkbox邏輯
