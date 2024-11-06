@@ -22,6 +22,9 @@ export const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground rounded-50',
         link: 'text-primary underline-offset-4 hover:underline',
         icon: 'border border-input border-secondary rounded-5 text-secondary bg-background hover:bg-accent hover:text-secondary',
+        pagination:
+          'border border-input border-secondary text-secondary bg-background hover:text-primary rounded-full',
+        paginationActive: 'bg-primary text-primary-foreground  rounded-full',
       },
       size: {
         default: 'px-12 py-10 text-base',
@@ -29,6 +32,7 @@ export const buttonVariants = cva(
         sm: 'px-16 py-10 text-base',
         lg: 'px-19 py-10 text-base',
         icon: 'p-8 text-base',
+        pagination: 'w-19 h-19 text-base',
         full: 'w-full  h-full text-base',
       },
     },

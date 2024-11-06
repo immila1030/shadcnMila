@@ -76,6 +76,40 @@
     <div class="flex gap-10 justify-center">
       <Button size="full">size full [full]</Button>
     </div>
+    <hr class="my-10" />
+    <p class="text-fz12 mt-10">分頁按鈕</p>
+    <Pagination
+      v-slot="{ page }"
+      :total="100"
+      :sibling-count="1"
+      show-edges
+      :default-page="2"
+    >
+      <PaginationList v-slot="{ items }" class="flex items-center gap-1">
+        <PaginationFirst />
+        <PaginationPrev />
+
+        <template v-for="(item, index) in items">
+          <PaginationListItem
+            v-if="item.type === 'page'"
+            :key="index"
+            :value="item.value"
+            as-child
+          >
+            <Button
+              size="pagination"
+              :variant="item.value === page ? 'paginationActive' : 'pagination'"
+            >
+              {{ item.value }}
+            </Button>
+          </PaginationListItem>
+          <PaginationEllipsis v-else :key="item.type" :index="index" />
+        </template>
+
+        <PaginationNext />
+        <PaginationLast />
+      </PaginationList>
+    </Pagination>
   </div>
   <!-- 複選框 -->
   <div class="m-20">
@@ -226,12 +260,52 @@
       <Button type="submit">Submit</Button>
     </form>
   </div>
+  <!-- 路由 -->
+  <div class="m-20">
+    <p class="text-fz16 mt-10">Form 表單</p>
+    <hr class="my-10" />
+    <Collapsible v-model:open="isOpen">
+      <CollapsibleTrigger>Can I use this in my project?</CollapsibleTrigger>
+      <CollapsibleContent>
+        Yes. Free to use for personal and commercial projects. No attribution
+        required.
+      </CollapsibleContent>
+    </Collapsible>
+    <!-- 直接使用 Collapsible 和 CollapsibleContent -->
+    <!-- 參考 https://www.shadcn-vue.com/blocks.html#Sidebar07 -->
+    <Collapsible
+      v-for="item in data.navMain"
+      :key="item.title"
+      as-child
+      :default-open="item.isActive"
+      class="group/collapsible"
+    >
+      <CollapsibleTrigger as-child>
+        <button class="menu-button" :tooltip="item.title">
+          <component :is="item.icon" />
+          <span>{{ item.title }}</span>
+        </button>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <div class="submenu">
+          <div
+            v-for="subItem in item.items"
+            :key="subItem.title"
+            class="submenu-item"
+          >
+            <a :href="subItem.url">
+              <span>{{ subItem.title }}</span>
+            </a>
+          </div>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Mail } from 'lucide-vue-next';
-import { ChevronRight } from 'lucide-vue-next';
 import {
   Accordion,
   AccordionContent,
@@ -275,11 +349,28 @@ import { toTypedSchema } from '@vee-validate/zod';
 // Use the useForm composable from vee-validate or use <Form /> component to create a form.
 // 使用 vee-validate 中的 useForm 可組合項目或使用 <Form /> 元件來建立表單。
 import { useForm } from 'vee-validate';
-import { h } from 'vue';
+import { h, ref } from 'vue';
 import * as z from 'zod'; //表單驗證
 import { Toaster } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/toast/use-toast';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
+import {
+  Pagination,
+  PaginationEllipsis,
+  PaginationFirst,
+  PaginationLast,
+  PaginationList,
+  PaginationListItem,
+  PaginationNext,
+  PaginationPrev,
+} from '@/components/ui/pagination';
 const { toast } = useToast();
+const isOpen = ref(false);
+// 手風琴
 const accordionItems = [
   {
     value: 'item-1',
@@ -305,6 +396,7 @@ const accordionItems = [
     content: '您隨時可以 重新啟用未來裝修圖說帳戶',
   },
 ];
+// 表單
 const formSchema = toTypedSchema(
   z.object({
     username: z
@@ -337,6 +429,107 @@ const onSubmit = handleSubmit((values) => {
     ),
   });
 });
+
+// 路由的
+import {
+  AudioWaveform,
+  BookOpen,
+  Bot,
+  ChevronRight,
+  Command,
+  GalleryVerticalEnd,
+  Settings2,
+  SquareTerminal,
+} from 'lucide-vue-next';
+const data = {
+  navMain: [
+    {
+      title: 'Playground',
+      url: '#',
+      icon: SquareTerminal,
+      isActive: true,
+      items: [
+        {
+          title: 'History',
+          url: '#',
+        },
+        {
+          title: 'Starred',
+          url: '#',
+        },
+        {
+          title: 'Settings',
+          url: '#',
+        },
+      ],
+    },
+    {
+      title: 'Models',
+      url: '#',
+      icon: Bot,
+      items: [
+        {
+          title: 'Genesis',
+          url: '#',
+        },
+        {
+          title: 'Explorer',
+          url: '#',
+        },
+        {
+          title: 'Quantum',
+          url: '#',
+        },
+      ],
+    },
+    {
+      title: 'Documentation',
+      url: '#',
+      icon: BookOpen,
+      items: [
+        {
+          title: 'Introduction',
+          url: '#',
+        },
+        {
+          title: 'Get Started',
+          url: '#',
+        },
+        {
+          title: 'Tutorials',
+          url: '#',
+        },
+        {
+          title: 'Changelog',
+          url: '#',
+        },
+      ],
+    },
+    {
+      title: 'Settings',
+      url: '#',
+      icon: Settings2,
+      items: [
+        {
+          title: 'General',
+          url: '#',
+        },
+        {
+          title: 'Team',
+          url: '#',
+        },
+        {
+          title: 'Billing',
+          url: '#',
+        },
+        {
+          title: 'Limits',
+          url: '#',
+        },
+      ],
+    },
+  ],
+};
 </script>
 
 <style></style>
