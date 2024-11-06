@@ -133,9 +133,9 @@
       <div class="flex items-center space-x-2 gap-10">
         <Checkbox
           :id="'select-all'"
-          :checked="selectAll"
-          @update:checked="toggleAllCheckboxes"
-          variant="selectAll"
+          :checked="isAnyCheckboxChecked"
+          @update:checked="toggleAllCheckbox()"
+          :variant="isAllCheckboxOpen ? 'selectAll' : ''"
         />
         <label
           for="select-all"
@@ -151,8 +151,8 @@
       >
         <Checkbox
           :id="'test-' + index"
-          :checked="checkedValues[index - 1]"
-          @update:checked="updateIndividualCheckbox(index - 1)"
+          :checked="checkboxStates[index - 1]"
+          @update:checked="toggleIndividualCheckbox(index - 1)"
         />
         <label
           :for="'test-' + index"
@@ -169,8 +169,8 @@
     <p>這邊模組只有更動DialogTitle DialogContent</p>
     <hr class="my-10" />
     <!-- 桌機版 24 20 -->
-    <Button @clicl="toggleDialogOpen">
-      打開DialogTrigger Open [桌機版 24 20]
+    <Button @click="toggleDialogOpen()">
+      另外的按鈕DialogTrigger Open [桌機版 24 20]
     </Button>
     <Dialog v-model:open="isDialogOpen">
       <DialogTrigger as-child>
@@ -451,32 +451,69 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import
+// 參考 https://vueuse.org/shared/useToggle/#usetoggle
+import { useToggle } from '@vueuse/core';
+const [isDialogOpen, toggleDialogOpen] = useToggle();
+
+// checkbox邏輯
+const isAllCheckboxOpen = ref(false); //全選
+const isAnyCheckboxChecked = ref(false); //單一複選框和全選的判斷
+const checkboxStates = ref(Array(10).fill(false)); //將每個單一複選框設置狀態
+
+// 全選的狀態
+const toggleAllCheckbox = () => {
+  // 全選可做切換
+  isAllCheckboxOpen.value = !isAllCheckboxOpen.value;
+  // 如果 全選和單一複選框為真 (全部選取的狀態)
+  if (isAllCheckboxOpen.value && checkboxStates.value) {
+    // 單一複選框和全選的判斷和將每個單一複選框設置狀態都設false
+    isAnyCheckboxChecked.value = false;
+    checkboxStates.value = Array(10).fill(false);
+  } else {
+    // 如果不是 代表按下全選後，都設定為真
+    isAnyCheckboxChecked.value = true;
+    checkboxStates.value = Array(10).fill(true);
+  }
+};
+// 單個複選框狀態
+const toggleIndividualCheckbox = (index) => {
+  // 每個複選框透過index設置狀態
+  checkboxStates.value[index] = !checkboxStates.value[index];
+  // 檢查每個單一複選框的值是否都為false
+  if (checkboxStates.value.every((state) => !state)) {
+    // 如果是的話則將全選取消掉true的狀態
+    isAllCheckboxOpen.value = false;
+  } else {
+    // 如果有任何一個單一複選框為true，則將全選和單一複選框和全選的判斷打開
+    isAllCheckboxOpen.value = true;
+    isAnyCheckboxChecked.value = true;
+  }
+};
 const { toast } = useToast();
 const isOpen = ref(false);
 const backgroundImageClass = ref('bg-[url(@/assets/mask.png)]');
-const checkedValues = ref<boolean[]>(new Array(10).fill(false)); //模擬有10個checkbox
-const selectAll = ref(false); //一開始設置 false 不全選
-const toggleAllCheckboxes = () => {
-  // console.log(selectAll.value);
-  selectAll.value = !selectAll.value; //這邊去切換是否要全選
-  if (selectAll.value) {
-    checkedValues.value = new Array(10).fill(true); //如果是則所有都要設為true
-  } else {
-    checkedValues.value = new Array(10).fill(false);
-  }
-};
-import { useAsyncState, whenever } from '@vueuse/core'
-const { state, isReady } = useAsyncState(
-  fetch('https://jsonplaceholder.typicode.com/todos/1').then(t => t.json()),
-  {},
-)
+// const checkedValues = ref<boolean[]>(new Array(10).fill(false)); //模擬有10個checkbox
+// const selectAll = ref(false); //一開始設置 false 不全選
+// const toggleAllCheckboxes = () => {
+//   // console.log(selectAll.value);
+//   selectAll.value = !selectAll.value; //這邊去切換是否要全選
+//   if (selectAll.value) {
+//     checkedValues.value = new Array(10).fill(true); //如果是則所有都要設為true
+//   } else {
+//     checkedValues.value = new Array(10).fill(false);
+//   }
+// };
+// import { useAsyncState, whenever } from '@vueuse/core';
+// const { state, isReady } = useAsyncState(
+//   fetch('https://jsonplaceholder.typicode.com/todos/1').then((t) => t.json()),
+//   {}
+// );
 
-whenever(isReady, () => console.log(state))
-// 可以單獨選取
-const updateIndividualCheckbox = (index: number) => {
-  checkedValues.value[index] = !checkedValues.value[index];
-};
+// whenever(isReady, () => console.log(state));
+// // 可以單獨選取
+// const updateIndividualCheckbox = (index: number) => {
+//   checkedValues.value[index] = !checkedValues.value[index];
+// };
 // 手風琴
 const accordionItems = [
   {
