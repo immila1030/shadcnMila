@@ -125,13 +125,54 @@
       </label>
     </div>
   </div>
+  <div class="m-20">
+    <p class="text-fz16 mt-10">Checkbox 複選框</p>
+    <hr class="my-10" />
+    <div class="flex items-center space-x-2 gap-10 justify-center my-10">
+      <!-- 如果是全選按鈕 傳入參數 -->
+      <div class="flex items-center space-x-2 gap-10">
+        <Checkbox
+          :id="'select-all'"
+          :checked="selectAll"
+          @update:checked="toggleAllCheckboxes"
+          variant="selectAll"
+        />
+        <label
+          for="select-all"
+          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none"
+        >
+          全選
+        </label>
+      </div>
+      <div
+        v-for="index in 10"
+        :key="index"
+        class="flex items-center space-x-2 gap-10"
+      >
+        <Checkbox
+          :id="'test-' + index"
+          :checked="checkedValues[index - 1]"
+          @update:checked="updateIndividualCheckbox(index - 1)"
+        />
+        <label
+          :for="'test-' + index"
+          class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 select-none"
+        >
+          我同意 {{ index }}
+        </label>
+      </div>
+    </div>
+  </div>
   <!-- 模組(可關閉靜態背景) -->
   <div class="m-20">
     <p class="text-fz16 mt-10">Dialog 模組(可關閉靜態背景)</p>
     <p>這邊模組只有更動DialogTitle DialogContent</p>
     <hr class="my-10" />
     <!-- 桌機版 24 20 -->
-    <Dialog>
+    <Button @clicl="toggleDialogOpen">
+      打開DialogTrigger Open [桌機版 24 20]
+    </Button>
+    <Dialog v-model:open="isDialogOpen">
       <DialogTrigger as-child>
         <Button>透過DialogTrigger Open [桌機版 24 20]</Button>
       </DialogTrigger>
@@ -410,9 +451,32 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import
 const { toast } = useToast();
 const isOpen = ref(false);
 const backgroundImageClass = ref('bg-[url(@/assets/mask.png)]');
+const checkedValues = ref<boolean[]>(new Array(10).fill(false)); //模擬有10個checkbox
+const selectAll = ref(false); //一開始設置 false 不全選
+const toggleAllCheckboxes = () => {
+  // console.log(selectAll.value);
+  selectAll.value = !selectAll.value; //這邊去切換是否要全選
+  if (selectAll.value) {
+    checkedValues.value = new Array(10).fill(true); //如果是則所有都要設為true
+  } else {
+    checkedValues.value = new Array(10).fill(false);
+  }
+};
+import { useAsyncState, whenever } from '@vueuse/core'
+const { state, isReady } = useAsyncState(
+  fetch('https://jsonplaceholder.typicode.com/todos/1').then(t => t.json()),
+  {},
+)
+
+whenever(isReady, () => console.log(state))
+// 可以單獨選取
+const updateIndividualCheckbox = (index: number) => {
+  checkedValues.value[index] = !checkedValues.value[index];
+};
 // 手風琴
 const accordionItems = [
   {

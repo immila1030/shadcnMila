@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { CheckboxRootEmits, CheckboxRootProps } from 'radix-vue';
 import { cn } from '@/lib/utils';
-import { Check } from 'lucide-vue-next';
+import { Check, Minus } from 'lucide-vue-next';
+
 import {
   CheckboxIndicator,
   CheckboxRoot,
@@ -10,7 +11,10 @@ import {
 import { computed, type HTMLAttributes } from 'vue';
 
 const props = defineProps<
-  CheckboxRootProps & { class?: HTMLAttributes['class'] }
+  CheckboxRootProps & {
+    class?: HTMLAttributes['class'];
+    variant?: '' | 'selectAll';
+  }
 >();
 const emits = defineEmits<CheckboxRootEmits>();
 
@@ -37,7 +41,8 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
       class="flex h-full w-full items-center justify-center text-current"
     >
       <slot>
-        <Check class="h-13 w-13" />
+        <Minus v-if="props.variant === 'selectAll'" class="h-13 w-13" />
+        <Check v-else class="h-13 w-13" />
       </slot>
     </CheckboxIndicator>
   </CheckboxRoot>
