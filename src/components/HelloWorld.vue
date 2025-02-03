@@ -24,7 +24,6 @@ const count = ref(0);
       create-vue
     </a>
     , the official Vue + Vite starter
-    測試使用mac上傳github
   </p>
   <p>
     Learn more about IDE Support for Vue in the
